@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'">
+<title>达货TK矩阵</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside class="side">
+  <div class="brand"><b>达货</b><span>TK矩阵</span></div>
+  <nav>
+    <button class="tab active" data-tab="accounts">账号池</button>
+    <button class="tab" data-tab="tasks">发布队列</button>
+    <button class="tab" data-tab="stats">数据看板</button>
+    <button class="tab" data-tab="collect">评论采集</button>
+    <button class="tab" data-tab="log">运行日志</button>
+  </nav>
+  <div class="foot">只做 TikTok · 本地运行 · 数据不出本机</div>
+</aside>
+
+<main>
+  <!-- 账号池 -->
+  <section id="accounts" class="panel active">
+    <header><h2>账号池</h2><span class="hint">每个账号独立浏览器环境 + 独立代理，互不串号</span></header>
+    <form id="accForm" class="card grid4">
+      <input name="name" placeholder="账号备注名（必填）" required>
+      <input name="handle" placeholder="@handle（用于抓数据）">
+      <input name="proxy" placeholder="代理 http://user:pass@ip:port 或 socks5://ip:port">
+      <input name="tz" placeholder="时区，默认 America/New_York">
+      <button type="submit">＋ 添加账号</button>
+    </form>
+    <table class="tbl">
+      <thead><tr><th>#</th><th>备注名</th><th>handle</th><th>状态</th><th>任务</th><th>播放</th><th>操作</th></tr></thead>
+      <tbody id="accBody"></tbody>
+    </table>
+  </section>
+
+  <!-- 发布队列 -->
+  <section id="tasks" class="panel">
+    <header><h2>发布队列</h2><span class="hint">串行执行，到点自动跑；失败可一键重试</span></header>
+    <form id="taskForm" class="card grid2">
+      <select name="account_id" id="taskAcc" required></select>
+      <button type="button" id="pickVideo">选择视频文件…</button>
+      <input name="video" id="videoPath" placeholder="视频路径" readonly>
+      <input name="schedule_at" type="datetime-local" title="留空=立即">
+      <textarea name="caption" rows="2" placeholder="文案"></textarea>
+      <input name="tags" placeholder="话题，空格分隔，如 travel food 生活">
+      <button type="submit">＋ 加入队列</button>
+    </form>
+    <div class="bar"><button id="retryFailed">重试失败任务</button></div>
+    <table class="tbl">
+      <thead><tr><th>#</th><th>账号</th><th>视频</th><th>计划时间</th><th>状态</th><th>次数</th><th>操作</th></tr></thead>
+      <tbody id="taskBody"></tbody>
+    </table>
+  </section>
+
+  <!-- 数据看板 -->
+  <section id="stats" class="panel">
+    <header><h2>数据看板</h2><span class="hint">点刷新会真开一次浏览器去抓，别太频繁</span></header>
+    <table class="tbl">
+      <thead><tr><th>账号</th><th>播放/赞</th><th>粉丝</th><th>抓取时间</th><th>操作</th></tr></thead>
+      <tbody id="statsBody"></tbody>
+    </table>
+  </section>
+
+  <!-- 评论采集 -->
+  <section id="collect" class="panel">
+    <header><h2>评论采集</h2><span class="hint">输入博主主页链接或 @handle，自动爬完他所有视频的评论区用户画像</span></header>
+    <form id="collectForm" class="card grid4">
+      <input name="input" placeholder="博主主页链接 / @handle（支持多行或逗号批量）" required style="grid-column: span 2;">
+      <input name="maxPerVideo" type="number" min="10" max="5000" value="500" placeholder="每视频上限（用户数）">
+      <input name="proxy" placeholder="代理 URL（可选，如 http://127.0.0.1:7890）" style="grid-column: span 2;">
+      <div>
+        <button type="submit" id="collectStart">🚀 启动采集</button>
+        <button type="button" id="collectStop" class="danger" style="display:none;">⏹ 停止</button>
+      </div>
+    </form>
+
+    <div class="bar">
+      <button id="collectRefresh" class="small">刷新任务</button>
+      <button id="collectClear" class="small danger">清空全部</button>
+      <span class="hint" id="collectProgress"></span>
+    </div>
+
+    <table class="tbl" id="collectTable">
+      <thead><tr><th>#</th><th>博主</th><th>状态</th><th>视频</th><th>评论用户</th><th>操作</th></tr></thead>
+      <tbody id="collectBody"></tbody>
+    </table>
+
+    <details>
+      <summary class="card small">实时采集日志（点击展开/收起）</summary>
+      <pre id="collectLog" class="log" style="max-height: 300px;"></pre>
+    </details>
+
+    <div id="profilesArea" style="display:none;">
+      <hr>
+      <header><h3 id="profilesTitle"></h3>
+        <button id="exportCsv" class="small">⬇ 导出 CSV</button>
+      </header>
+      <table class="tbl" id="profilesTable">
+        <thead><tr><th>头像</th><th>handle</th><th>昵称</th><th>粉丝</th><th>赞</th><th>视频</th><th>简介</th></tr></thead>
+        <tbody id="profilesBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 日志 -->
+  <section id="log" class="panel">
+    <header><h2>运行日志</h2></header>
+    <pre id="logBox" class="log"></pre>
+  </section>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

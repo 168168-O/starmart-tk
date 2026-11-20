@@ -1,0 +1,27 @@
+# 依赖与构建产物
+node_modules/
+dist/
+build/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# 运行时数据（数据库 / cookie / 浏览器 profile）
+*.db
+*.db-journal
+*.db-wal
+cookie.json
+profiles/
+.user-data/
+
+# 日志与临时文件
+*.log
+Thumbs.db
+.DS_Store
+_tmp*
+
+# 开发调试脚本
+python/tools/

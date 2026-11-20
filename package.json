@@ -1,0 +1,26 @@
+{
+  "name": "starmart-tk",
+  "version": "2.0.0",
+  "description": "StarMart-TK  ·  TikTok-only 矩阵引擎（账号池 / 指纹隔离 / 批量上传 / 定时发布 / 数据看板）",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win nsis",
+    "postinstall": "playwright install chromium"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.3.0",
+    "playwright": "^1.47.0"
+  },
+  "devDependencies": {
+    "electron": "^32.1.0",
+    "electron-builder": "^25.0.5"
+  },
+  "build": {
+    "appId": "com.starmart.tk",
+    "productName": "达货TK矩阵",
+    "directories": { "output": "dist" },
+    "win": { "target": "nsis" },
+    "files": ["main.js", "preload.js", "db.js", "core/**", "renderer/**", "assets/**", "python/**"]
+  }
+}

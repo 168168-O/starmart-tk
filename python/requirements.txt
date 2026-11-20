@@ -1,0 +1,8 @@
+# 运行采集引擎只需要 curl_cffi（替代 requests，伪装 TLS 指纹）
+curl_cffi>=0.7.0
+
+# Playwright 只在「一次性抓 cookie/签名」时用，采完可以不跑浏览器
+playwright>=1.44.0
+
+# 可选：tqdm 进度条，没有也能跑（退化成简单打印）
+tqdm>=4.66.0
